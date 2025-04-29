@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="sk" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:fragment="head">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Poistenie aplikácia"/>
+    <meta name="keywords" content="poistenie, poisťovňa, financie"/>
+    <meta name="author" content="Tvoj Tím"/>
+
+    <title>Poistenie</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" th:href="@{/styles/bootstrap.min.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/styles/styles.css}" type="text/css"/>
+    <link rel="shortcut icon" th:href="@{/images/icon.ico}"/>
+
+    <!-- TomSelect CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+
+    <!-- JavaScript libraries -->
+    <script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
+    <script th:src="@{/scripts/script.js}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+</head>
+
+<body>
+
+<!-- Header fragment -->
+<header th:fragment="header">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black shadow-sm mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold text-white" th:href="@{/}">PoistenieApp</a>
+
+            <!-- Mobile menu toggle button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation links -->
+            <div class="collapse navbar-collapse bg-black p-3" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" th:href="@{/insured-persons}">Poistenci</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" th:href="@{/insurance}">Poistenie</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" th:href="@{/insurance/0/events/reports}">Udalosti</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" th:href="@{/about-us}">O aplikácii</a>
+                    </li>
+                </ul>
+
+                <!-- User authentication section -->
+                <ul class="navbar-nav ms-auto">
+                    <!-- Display username and role if authenticated -->
+                    <li class="nav-item d-flex align-items-center text-white me-3" sec:authorize="isAuthenticated()">
+                        <span th:text="${#authentication.name}" class="me-2"></span>
+                        <span class="badge text-dark bg-warning px-2 py-1"
+                              th:text="${#strings.replace(#authentication.authorities[0].authority, 'ROLE_', '')}">
+                        </span>
+                    </li>
+
+                    <!-- Links for anonymous users -->
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link text-white" th:href="@{/account/login}">Prihlásenie</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link text-white" th:href="@{/account/register}">Registrácia</a>
+                    </li>
+
+                    <!-- Logout button for authenticated users -->
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <form method="post" th:action="@{/account/logout}" class="d-inline">
+                            <button class="nav-link text-white border-0 bg-transparent" style="cursor: pointer;">
+                                Odhlásiť sa
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Main content section -->
+<main class="flex-grow-1">
+    <div class="container">
+        <th:block th:insert="~{::content}"/>
+    </div>
+</main>
+
+<!-- Footer fragment -->
+<footer class="mt-auto py-3 text-center bg-light text-dark" th:fragment="footer">
+    <div class="container">
+        &copy; 2023 - <span th:text="${#temporals.format(#temporals.createNow(), 'yyyy')}"></span> PoistenieApp
+    </div>
+</footer>
+
+</body>
+</html>

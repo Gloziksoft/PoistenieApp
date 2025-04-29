@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="sk" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments/layout.html :: head}">
+    <!-- Load TomSelect styles and scripts if not already included -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+    <title>Pridať poistenie</title>
+</head>
+<body>
+
+<!-- Header section -->
+<header th:replace="~{fragments/layout.html :: header}"></header>
+
+<!-- Main content container -->
+<div class="container py-4">
+    <h2 class="text-center mb-4">Pridať poistenie</h2>
+
+    <!-- Create insurance form -->
+    <form th:action="@{/insurance/create}" th:object="${insurance}" method="post" class="card p-4 shadow mx-auto">
+
+        <!-- Select policy holder -->
+        <div class="mb-3">
+            <label for="policyHolderId" class="form-label">Poistník</label>
+            <select id="policyHolderId" th:field="*{policyHolderId}" class="form-control">
+                <option value="">-- Vyber poistníka --</option>
+                <option th:each="p : ${persons}"
+                        th:value="${p.id}"
+                        th:text="${p.firstName + ' ' + p.lastName}">
+                </option>
+            </select>
+            <!-- Validation error for policyHolderId -->
+            <div class="text-danger" th:if="${#fields.hasErrors('policyHolderId')}" th:errors="*{policyHolderId}"></div>
+        </div>
+
+        <!-- Select insured person -->
+        <div class="mb-3">
+            <label for="insuredPersonId" class="form-label">Poistený</label>
+            <select id="insuredPersonId" th:field="*{insuredPersonId}" class="form-control">
+                <option value="">-- Vyber poisteného --</option>
+                <option th:each="p : ${persons}"
+                        th:value="${p.id}"
+                        th:text="${p.firstName + ' ' + p.lastName}">
+                </option>
+            </select>
+            <!-- Validation error for insuredPersonId -->
+            <div class="text-danger" th:if="${#fields.hasErrors('insuredPersonId')}" th:errors="*{insuredPersonId}"></div>
+        </div>
+
+        <!-- Select insurance type -->
+        <div class="mb-3">
+            <label for="insuranceType" class="form-label">Typ poistenia</label>
+            <select id="insuranceType" th:field="*{insuranceType}" class="form-control">
+                <option value="">-- Vyber typ poistenia --</option>
+                <option th:each="type : ${T(com.poistenie.app.data.enums.InsuranceType).values()}"
+                        th:value="${type}"
+                        th:text="${type.displayName}">
+                </option>
+            </select>
+            <!-- Validation error for insuranceType -->
+            <div class="text-danger" th:if="${#fields.hasErrors('insuranceType')}" th:errors="*{insuranceType}"></div>
+        </div>
+
+        <!-- Amount and dates -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="insuredAmount" class="form-label">Čiastka (€)</label>
+                <input type="number" id="insuredAmount" th:field="*{insuredAmount}" class="form-control"/>
+                <!-- Validation error for insuredAmount -->
+                <div class="text-danger" th:if="${#fields.hasErrors('insuredAmount')}" th:errors="*{insuredAmount}"></div>
+            </div>
+
+            <div class="col-md-3">
+                <label for="startDate" class="form-label">Platnosť od</label>
+                <input type="date" id="startDate" th:field="*{startDate}" class="form-control"/>
+                <!-- Validation error for startDate -->
+                <div class="text-danger" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></div>
+            </div>
+
+            <div class="col-md-3">
+                <label for="endDate" class="form-label">Platnosť do</label>
+                <input type="date" id="endDate" th:field="*{endDate}" class="form-control"/>
+                <!-- Validation error for endDate -->
+                <div class="text-danger" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></div>
+            </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="d-flex justify-content-end">
+            <a th:href="@{/insurance}" class="btn btn-secondary me-2">Späť</a>
+            <button type="submit" class="btn btn-primary">Uložiť</button>
+        </div>
+
+    </form>
+</div>
+
+<!-- Footer section -->
+<footer th:replace="~{fragments/layout.html :: footer}"></footer>
+
+</body>
+</html>

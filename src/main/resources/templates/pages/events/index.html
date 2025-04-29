@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="sk" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments/layout.html :: head}"></head>
+<body>
+
+<!-- Header section -->
+<header th:replace="~{fragments/layout.html :: header}"></header>
+
+<!-- Main content section -->
+<div class="container py-5">
+    <!-- Insurance events title -->
+    <h2 class="text-center mb-4" th:text="'Udalosti pre poistenie: ' + ${insurance.insuranceType}"></h2>
+
+    <!-- Table of events -->
+    <table class="table table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th>Dátum</th>
+            <th>Popis udalosti</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Iterate through the list of events -->
+        <tr th:each="event : ${events}">
+            <td th:text="${#temporals.format(event.eventDate, 'dd.MM.yyyy HH:mm')}"></td>
+            <td th:text="${event.description}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Link back to insurance list -->
+    <div class="mt-4">
+        <a th:href="@{/insurance}" class="btn btn-primary">Späť na poistenia</a>
+    </div>
+</div>
+
+<!-- Footer section -->
+<footer th:replace="~{fragments/layout.html :: footer}"></footer>
+
+</body>
+</html>

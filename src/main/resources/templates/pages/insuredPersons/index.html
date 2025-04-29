@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="sk" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments/layout.html :: head}"></head>
+<body>
+
+<!-- Header section -->
+<header th:replace="~{fragments/layout.html :: header}"></header>
+
+<!-- Flash messages for success and error -->
+<div class="py-2 flash-message message-success" th:text="${success}" th:if="${success}"></div>
+<div class="py-2 flash-message message-error" th:text="${error}" th:if="${error}"></div>
+
+<div class="container">
+    <main role="main" class="pb-3">
+
+        <!-- Page title -->
+        <h1 class="text-center mb-4">Poistenci</h1>
+
+        <!-- Search form -->
+        <form class="d-flex justify-content-center mb-3" th:action="@{/insured-persons}" method="get">
+            <input id="search-input" class="form-control form-control-sm w-25" type="search" name="search"
+                   th:value="${search}" placeholder="Hľadať meno..." aria-label="Search">
+            <button class="btn btn-sm btn-outline-success ms-2" type="submit">Hľadať</button>
+        </form>
+
+        <!-- Button to add a new insured person (visible for admin only) -->
+        <div class="d-flex justify-content-center mb-3" sec:authorize="hasRole('ROLE_ADMIN')">
+            <a th:href="@{/insured-persons/create}" class="btn btn-primary">Nový poistenec</a>
+        </div>
+
+        <!-- Display message if no insured persons found -->
+        <h5 th:if="${insuredPersons.isEmpty()}" class="text-muted text-center">Žiadni poistenci neboli nájdení</h5>
+
+        <!-- Table listing insured persons -->
+        <div class="table-responsive">
+            <table th:if="${!insuredPersons.isEmpty()}" class="table table-striped table-hover">
+                <thead class="table-dark">
+                <tr>
+                    <th class="text-left">Meno</th>
+                    <th class="text-left">Bydlisko</th>
+                    <th class="text-center">Akcie</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="insuredPerson : ${insuredPersons}">
+                    <!-- Display insured person's name as link -->
+                    <td>
+                        <a th:href="@{'/insured-persons/detail/' + ${insuredPerson.id}}"
+                           class="fw-bold text-primary"
+                           th:text="${insuredPerson.firstName + ' ' + insuredPerson.lastName}">
+                        </a>
+                    </td>
+
+                    <!-- Display insured person's address -->
+                    <td th:text="${insuredPerson.street + ' ' + insuredPerson.city + ' ' + insuredPerson.postalCode}"></td>
+
+                    <!-- Edit and delete actions -->
+                    <td class="text-end">
+                        <a th:href="@{'/insured-persons/edit/' + ${insuredPerson.id}}"
+                           class="btn btn-warning btn-sm me-1">
+                            Editovať
+                        </a>
+                        <form th:action="@{'/insured-persons/delete/' + ${insuredPerson.id}}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Naozaj chcete poistenca odstrániť?');">
+                                Odstrániť
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+</div>
+
+<!-- Pagination control -->
+<div class="d-flex justify-content-center mt-4" th:if="${totalPages > 1}">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <!-- Predchádzajúca -->
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{/insured-persons(page=${currentPage - 1}, search=${search})}">&laquo;</a>
+            </li>
+
+            <!-- Čísla stránok -->
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link" th:href="@{/insured-persons(page=${i}, search=${search})}" th:text="${i + 1}"></a>
+            </li>
+
+            <!-- Ďalšia -->
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/insured-persons(page=${currentPage + 1}, search=${search})}">&raquo;</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<!-- Back button -->
+<div class="text-center mt-3" th:if="${search != null}">
+    <a th:href="@{/insured-persons}" class="btn btn-outline-primary">Zobraziť všetkých</a>
+</div>
+
+<!-- Footer section -->
+<footer th:replace="~{fragments/layout.html :: footer}"></footer>
+
+<!-- JavaScript scripts -->
+<script th:src="@{/scripts/script.js}"></script>
+
+</body>
+</html>

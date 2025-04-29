@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments/layout.html :: head}"></head>
+<body>
+
+<!-- Header section -->
+<header th:replace="~{fragments/layout.html :: header}"></header>
+
+<!-- Main container -->
+<div class="container">
+    <main role="main" class="pb-3">
+
+        <!-- Welcome message in English -->
+        <div class="text-center">
+            <h1 class="mt-4">Welcome to PoistenieApp</h1>
+            <p class="lead">
+                Secure your future with our reliable insurance services.
+                We provide coverage for health, property, and more, ensuring peace of mind for you and your loved ones.
+            </p>
+            <p>
+                Explore our insurance options or manage your policies with ease.
+            </p>
+            <a th:href="@{/about-us}" class="btn btn-primary">About Application</a>
+        </div>
+
+        <!-- Welcome message in Slovak -->
+        <div class="text-center">
+            <h1 class="mt-4">Vitajte v PoistenieApp</h1>
+            <p class="lead">
+                Zabezpečte svoju budúcnosť s našimi spoľahlivými poisťovacími službami.
+                Ponúkame poistenie zdravia, majetku a mnoho ďalších možností, aby ste mali istotu a pokoj.
+            </p>
+            <p>
+                Preskúmajte naše poistenia alebo jednoducho spravujte svoje existujúce zmluvy.
+            </p>
+            <a th:href="@{/about-us}" class="btn btn-primary">O aplikácii</a>
+        </div>
+
+    </main>
+</div>
+
+<!-- Footer section -->
+<footer th:replace="~{fragments/layout.html :: footer}"></footer>
+
+</body>
+</html>

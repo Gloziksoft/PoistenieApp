@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments/layout.html :: head}"></head>
+
+<body>
+
+<!-- Header section -->
+<header th:replace="~{fragments/layout.html :: header}"></header>
+
+<!-- Flash message for errors -->
+<div class="py-2 flash-message message-error" th:text="${error}" th:if="${error}"></div>
+
+<!-- Registration form section -->
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-4 shadow-lg" style="width: 400px; background: white; border-radius: 8px;">
+        <!-- Registration title -->
+        <h2 class="text-center mb-3">Registrácia</h2>
+
+        <!-- Registration form -->
+        <form th:action="@{/account/register}" th:object="${userDTO}" method="post" class="d-flex flex-column gap-3">
+            <!-- Email input -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" name="email" th:field="*{email}" class="form-control"/>
+                <small class="text-danger" th:errors="*{email}"></small>
+            </div>
+
+            <!-- Password input -->
+            <div class="form-group">
+                <label for="password">Heslo</label>
+                <input id="password" name="password" type="password" th:field="*{password}" class="form-control"/>
+                <small class="text-danger" th:errors="*{password}"></small>
+            </div>
+
+            <!-- Confirm password input -->
+            <div class="form-group">
+                <label for="confirm-password">Potvrdenie hesla</label>
+                <input id="confirm-password" name="password" type="password" th:field="*{confirmPassword}" class="form-control"/>
+                <small class="text-danger" th:errors="*{confirmPassword}"></small>
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-success btn-block">Registrovať sa</button>
+        </form>
+
+        <!-- Link to login page -->
+        <div class="text-center mt-3">
+            <p>Máte už účet? <a th:href="@{/account/login}" class="text-primary">Prihlásiť sa</a></p>
+        </div>
+    </div>
+</div>
+
+<!-- Footer section -->
+<footer th:replace="~{fragments/layout.html :: footer}"></footer>
+
+</body>
+</html>

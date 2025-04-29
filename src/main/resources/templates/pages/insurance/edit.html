@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="sk" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout.html :: head}">
+    <title>Úprava poistenia</title>
+</head>
+<body>
+
+<!-- Header section -->
+<header th:replace="~{fragments/layout.html :: header}"></header>
+
+<!-- Main content container -->
+<div class="container py-5">
+    <div class="card mx-auto" style="max-width: 700px;">
+        <div class="card-body">
+            <h4 class="card-title text-center mb-4">Úprava poistenia</h4>
+
+            <!-- EDIT FORM: only for ADMIN -->
+            <div sec:authorize="hasRole('ADMIN')">
+                <form method="post" th:action="@{'/insurance/edit/' + ${insurance.id}}" th:object="${insurance}">
+
+                    <input type="hidden" th:field="*{id}" />
+
+                    <div class="mb-3">
+                        <label for="insuranceType" class="form-label">Typ poistenia</label>
+                        <select id="insuranceType" class="form-control" th:field="*{insuranceType}">
+                            <option th:each="type : ${T(com.poistenie.app.data.enums.InsuranceType).values()}"
+                                    th:value="${type}"
+                                    th:text="${type.displayName}">
+                            </option>
+                        </select>
+                        <small class="text-danger" th:errors="*{insuranceType}"></small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="insuredAmount" class="form-label">Čiastka (€)</label>
+                        <input type="number" step="0.01" class="form-control" th:field="*{insuredAmount}" id="insuredAmount"/>
+                        <small class="text-danger" th:errors="*{insuredAmount}"></small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="startDate" class="form-label">Začiatok poistenia</label>
+                        <input type="date" class="form-control" th:field="*{startDate}" id="startDate"/>
+                        <small class="text-danger" th:errors="*{startDate}"></small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="endDate" class="form-label">Koniec poistenia</label>
+                        <input type="date" class="form-control" th:field="*{endDate}" id="endDate"/>
+                        <small class="text-danger" th:errors="*{endDate}"></small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="insuredPersonId" class="form-label">Poistená osoba</label>
+                        <select id="insuredPersonId" th:field="*{insuredPersonId}" class="form-control">
+                            <option value="">-- Vyber poistenca --</option>
+                            <option th:each="p : ${persons}"
+                                    th:value="${p.id}"
+                                    th:text="${p.firstName + ' ' + p.lastName}">
+                            </option>
+                        </select>
+                        <small class="text-danger" th:errors="*{insuredPersonId}"></small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="policyHolderId" class="form-label">Držiteľ poistky</label>
+                        <select id="policyHolderId" th:field="*{policyHolderId}" class="form-control">
+                            <option value="">-- Vyber poistníka --</option>
+                            <option th:each="p : ${persons}"
+                                    th:value="${p.id}"
+                                    th:text="${p.firstName + ' ' + p.lastName}">
+                            </option>
+                        </select>
+                        <small class="text-danger" th:errors="*{policyHolderId}"></small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Meno poistenej osoby</label>
+                        <input type="text" class="form-control" th:field="*{insuredPersonFirstName}" readonly/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Priezvisko poistenej osoby</label>
+                        <input type="text" class="form-control" th:field="*{insuredPersonLastName}" readonly/>
+                    </div>
+
+                    <!-- Action buttons -->
+                    <div class="text-center mt-4">
+                        <a th:href="@{/insurance}" class="btn btn-secondary me-3">Späť</a>
+                        <button type="submit" class="btn btn-success">Uložiť</button>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Optional: message for non-admin users -->
+            <div sec:authorize="!hasRole('ADMIN')" class="text-center mt-4">
+                <p class="text-danger">Nemáte oprávnenie upravovať poistenie.</p>
+                <a th:href="@{/insurance}" class="btn btn-secondary">Späť na zoznam</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Footer section -->
+<footer th:replace="~{fragments/layout.html :: footer}"></footer>
+
+</body>
+</html>

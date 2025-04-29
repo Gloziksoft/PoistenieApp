@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="sk" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="~{fragments/layout.html :: head}"></head>
+
+<body>
+<!-- Header section -->
+<header th:replace="~{fragments/layout.html :: header}"></header>
+
+<!-- Main container for edit insured person form -->
+<div class="container py-5">
+    <div class="card shadow p-4 mx-auto" style="max-width: 700px;">
+        <h3 class="text-center mb-4">Úprava poistenca</h3>
+
+        <!-- Form for editing an existing insured person -->
+        <form method="post"
+              th:action="@{'/insured-persons/edit/' + ${insuredPerson.id}}"
+              th:object="${insuredPerson}">
+
+            <div class="row">
+                <!-- First Name input -->
+                <div class="col-md-6 mb-3">
+                    <label for="firstName" class="form-label">Meno</label>
+                    <input id="firstName" class="form-control" th:field="*{firstName}">
+                    <small class="text-danger" th:errors="*{firstName}"></small>
+                </div>
+
+                <!-- Last Name input -->
+                <div class="col-md-6 mb-3">
+                    <label for="lastName" class="form-label">Priezvisko</label>
+                    <input id="lastName" class="form-control" th:field="*{lastName}">
+                    <small class="text-danger" th:errors="*{lastName}"></small>
+                </div>
+            </div>
+
+            <!-- Age input -->
+            <div class="mb-3">
+                <label for="age" class="form-label">Vek</label>
+                <input id="age" type="number" step="0.1" class="form-control" th:field="*{age}" placeholder="Zadajte vek">
+                <small class="text-danger" th:errors="*{age}"></small>
+            </div>
+
+            <!-- Email input -->
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input id="email" class="form-control" type="email" th:field="*{email}">
+                <small class="text-danger" th:errors="*{email}"></small>
+            </div>
+
+            <!-- Phone number input -->
+            <div class="mb-3">
+                <label for="phone" class="form-label">Tel. č.</label>
+                <input id="phone" class="form-control" th:field="*{phone}">
+                <small class="text-danger" th:errors="*{phone}"></small>
+            </div>
+
+            <!-- Street address input -->
+            <div class="mb-3">
+                <label for="street" class="form-label">Ulica a číslo</label>
+                <input id="street" class="form-control" th:field="*{street}">
+                <small class="text-danger" th:errors="*{street}"></small>
+            </div>
+
+            <div class="row">
+                <!-- City input -->
+                <div class="col-md-6 mb-3">
+                    <label for="city" class="form-label">Mesto</label>
+                    <input id="city" class="form-control" th:field="*{city}">
+                    <small class="text-danger" th:errors="*{city}"></small>
+                </div>
+
+                <!-- Postal code input -->
+                <div class="col-md-6 mb-3">
+                    <label for="postalCode" class="form-label">PSČ</label>
+                    <input id="postalCode" class="form-control" th:field="*{postalCode}">
+                    <small class="text-danger" th:errors="*{postalCode}"></small>
+                </div>
+            </div>
+
+            <!-- Submit and back buttons -->
+            <div class="text-center mt-4 d-flex justify-content-center gap-3 flex-wrap">
+                <button type="submit" class="btn btn-success px-4">Uložiť</button>
+                <a th:href="@{/insured-persons}" class="btn btn-secondary px-4">Späť</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Footer section -->
+<footer th:replace="~{fragments/layout.html :: footer}"></footer>
+
+</body>
+</html>
