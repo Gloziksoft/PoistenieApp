@@ -109,6 +109,7 @@ public class InsuranceServiceImpl implements InsuranceService {
      */
     @Override
     public InsuranceDTO update(Long id, InsuranceDTO dto) {
+ HEAD
         InsuranceEntity existing = repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Poistenie s ID " + id + " nebolo nájdené."));
 
@@ -119,9 +120,23 @@ public class InsuranceServiceImpl implements InsuranceService {
                 .orElseThrow(() -> new RuntimeException("Poistenec neexistuje."));
         updated.setInsuredPerson(insuredPerson);
 
+        InsuranceEntity insurance = repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Poistenie s ID " + id + " nebolo nájdené."));
+
+        insurance.setInsuranceType(dto.getInsuranceType());
+        insurance.setInsuredAmount(dto.getInsuredAmount());
+        insurance.setStartDate(dto.getStartDate());
+        insurance.setEndDate(dto.getEndDate());
+
+        InsuredPersonEntity insuredPerson = insuredPersonRepository.findById(dto.getInsuredPersonId())
+                .orElseThrow(() -> new RuntimeException("Poistenec neexistuje."));
+        insurance.setInsuredPerson(insuredPerson);
+ 32625b6 (First commit oprava edit a creat.)
+
         if (dto.getPolicyHolderId() != null) {
             InsuredPersonEntity policyHolder = insuredPersonRepository.findById(dto.getPolicyHolderId())
                     .orElseThrow(() -> new RuntimeException("Poistník neexistuje."));
+ HEAD
             updated.setPolicyHolder(policyHolder);
         }
 
@@ -131,6 +146,17 @@ public class InsuranceServiceImpl implements InsuranceService {
         logInsuranceEvent(savedInsurance, "Úprava poistenia pre");
 
         return mapper.toDTO(savedInsurance);
+
+            insurance.setPolicyHolder(policyHolder);
+        } else {
+            insurance.setPolicyHolder(null);
+        }
+
+        InsuranceEntity saved = repository.save(insurance);
+        logInsuranceEvent(saved, "Úprava poistenia pre");
+
+        return mapper.toDTO(saved);
+ 32625b6 (First commit oprava edit a creat.)
     }
 
     /**
