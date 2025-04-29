@@ -3,10 +3,7 @@ package com.poistenie.app.data.entities;
 import com.poistenie.app.data.enums.InsuranceType;
 import jakarta.persistence.*;
 import java.time.LocalDate;
- HEAD
-
 import java.util.List;
- 32625b6 (First commit oprava edit a creat.)
 
 /**
  * Represents an insurance policy for an insured person.
@@ -53,14 +50,12 @@ public class InsuranceEntity {
     @JoinColumn(name = "policy_holder_id")
     private InsuredPersonEntity policyHolder;
 
-<<<<<<< HEAD
-=======
-
+    /**
+     * List of events associated with this insurance.
+     */
     @OneToMany(mappedBy = "insurance", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventEntity> events;
 
-
->>>>>>> 32625b6 (First commit oprava edit a creat.)
     // --- Getters and Setters ---
 
     /**
@@ -111,8 +106,6 @@ public class InsuranceEntity {
     public InsuredPersonEntity getPolicyHolder() { return policyHolder; }
 
     public void setPolicyHolder(InsuredPersonEntity policyHolder) { this.policyHolder = policyHolder; }
-<<<<<<< HEAD
-=======
 
     /**
      * Returns the list of associated event entities.
@@ -127,5 +120,4 @@ public class InsuranceEntity {
     public void setEvents(List<EventEntity> events) {
         this.events = events;
     }
->>>>>>> 32625b6 (First commit oprava edit a creat.)
 }

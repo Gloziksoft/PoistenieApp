@@ -109,17 +109,6 @@ public class InsuranceServiceImpl implements InsuranceService {
      */
     @Override
     public InsuranceDTO update(Long id, InsuranceDTO dto) {
- HEAD
-        InsuranceEntity existing = repository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Poistenie s ID " + id + " nebolo nájdené."));
-
-        InsuranceEntity updated = mapper.toEntity(dto);
-        updated.setId(existing.getId());
-
-        InsuredPersonEntity insuredPerson = insuredPersonRepository.findById(dto.getInsuredPersonId())
-                .orElseThrow(() -> new RuntimeException("Poistenec neexistuje."));
-        updated.setInsuredPerson(insuredPerson);
-
         InsuranceEntity insurance = repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Poistenie s ID " + id + " nebolo nájdené."));
 
@@ -131,22 +120,10 @@ public class InsuranceServiceImpl implements InsuranceService {
         InsuredPersonEntity insuredPerson = insuredPersonRepository.findById(dto.getInsuredPersonId())
                 .orElseThrow(() -> new RuntimeException("Poistenec neexistuje."));
         insurance.setInsuredPerson(insuredPerson);
- 32625b6 (First commit oprava edit a creat.)
 
         if (dto.getPolicyHolderId() != null) {
             InsuredPersonEntity policyHolder = insuredPersonRepository.findById(dto.getPolicyHolderId())
                     .orElseThrow(() -> new RuntimeException("Poistník neexistuje."));
- HEAD
-            updated.setPolicyHolder(policyHolder);
-        }
-
-        InsuranceEntity savedInsurance = repository.save(updated);
-
-        // Log update event
-        logInsuranceEvent(savedInsurance, "Úprava poistenia pre");
-
-        return mapper.toDTO(savedInsurance);
-
             insurance.setPolicyHolder(policyHolder);
         } else {
             insurance.setPolicyHolder(null);
@@ -156,7 +133,6 @@ public class InsuranceServiceImpl implements InsuranceService {
         logInsuranceEvent(saved, "Úprava poistenia pre");
 
         return mapper.toDTO(saved);
- 32625b6 (First commit oprava edit a creat.)
     }
 
     /**
