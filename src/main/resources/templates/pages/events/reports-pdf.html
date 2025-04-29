@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+
+    <!-- Simple styling for PDF or HTML table rendering -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            font-size: 12px;
+        }
+        th {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Message shown if insurance data is not found -->
+<div th:if="${insuranceNotFound}">
+    <p>Poistenie nebolo nájdené. Tento report je prázdny.</p>
+</div>
+
+<!-- Report title -->
+<h2 class="text-center mb-4"
+    th:text="${insurance != null} ? 'Report udalostí pre poistenie: ' + ${insurance.insuranceType} : 'Report všetkých udalostí'">
+</h2>
+
+
+<!-- Events table -->
+<table>
+    <thead>
+    <tr>
+        <th>Dátum</th>
+        <th>Popis</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Iterating over event list -->
+    <tr th:each="event : ${events}">
+        <td th:text="${#temporals.format(event.eventDate, 'dd.MM.yyyy HH:mm')}"></td>
+        <td th:text="${event.description}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
